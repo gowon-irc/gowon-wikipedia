@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wikipedia
+  labels:
+    app.kubernetes.io/name: wikipedia
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: wikipedia
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: wikipedia
+    spec:
+      containers:
+        - name: wikipedia
+          image: wikipedia
+          env:
+            - name: GOWON_BROKER
+              value: mosquitto:1883
