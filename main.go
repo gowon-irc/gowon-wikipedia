@@ -11,6 +11,7 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/gowon-irc/go-gowon"
 	"github.com/jessevdk/go-flags"
+	"github.com/trietmn/go-wiki"
 )
 
 type Options struct {
@@ -25,7 +26,7 @@ const (
 )
 
 func wikiHandler(m gowon.Message) (string, error) {
-	return wiki(m.Args)
+	return gowiki.Summary(m.Args, 5, -1, true, true)
 }
 
 func defaultPublishHandler(c mqtt.Client, msg mqtt.Message) {
@@ -63,6 +64,8 @@ func main() {
 	mqttOpts.OnConnectionLost = onConnectionLostHandler
 	mqttOpts.OnReconnecting = onRecconnectingHandler
 	mqttOpts.OnConnect = onConnectHandler
+
+	gowiki.SetUserAgent("gowon.cc (mail@gowon.cc)")
 
 	mr := gowon.NewMessageRouter()
 	mr.AddCommand("wiki", wikiHandler)
